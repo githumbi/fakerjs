@@ -1,12 +1,36 @@
-const faker = require('faker')
+const faker = require('faker'),
+mongoose  = require("mongoose")
 
-const User = {
-  name: faker.name.findName(),
-  email: faker.internet.email(),
-  website: faker.internet.url(),
-  address: faker.address.streetAddress() + faker.address.city() + faker.address.country(),
-  bio: faker.lorem.sentences(),
-  image: faker.image.avatar()
-}
+mongoose.connect("mongodb://localhost/faker_db")
 
-module.exports = User
+var fakerSchema = new mongoose.Schema({
+  title: String,
+  body: String,
+  image: String
+   })
+
+var fake = mongoose.model("fake", fakerSchema)
+
+
+fake.create({
+  title: faker.name.title(),
+  body: faker.lorem.sentences(),
+  image: faker.image.imageUrl()
+},(err,list)=>{
+  if (err) {
+    console.log("error")
+  } else {
+    console.log(list)
+    module.exports(list)
+  }
+})
+
+ module.exports = fake
+
+// fake.find({User},(err, list)=>{
+//   if (err) {
+//     console.log(err)
+//   } else {
+//     console.log("success")
+//   }
+// })
